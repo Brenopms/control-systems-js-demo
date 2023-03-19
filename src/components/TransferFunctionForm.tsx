@@ -6,17 +6,19 @@ import { TextField } from "./TextField";
 import {
   transferFunction,
   ITransferFunction,
-  IRootLocus,
   RootLocusOutput,
   ChartOutput,
+  BodeChart,
+  NyquistChart,
 } from "systems-control-js";
 import { Outcome } from "./Outcome";
 import { toSuperscriptExpression } from "../utils/supescript";
 import { tfFormInputSchema } from "../validations/tfInput";
 import { PolesAndZerosChart } from "./charts/PolesAndZerosChart";
-import { RlocusChart } from "./charts/RootLocusChart";
 import { StepChart } from "./charts/StepChart";
 import { ImpulseChart } from "./charts/ImpulseChart";
+import { BodeCharts } from "./charts/BodeCharts";
+import { NyquistPChart } from "./charts/NyquistChart";
 
 // Define the form inputs as a TypeScript interface
 type TfFormValues = z.infer<typeof tfFormInputSchema>;
@@ -31,9 +33,12 @@ const boundaryRange = (start: number, end: number, step = 1): number[] => {
 
 export const TransferFunctionForm = () => {
   const [tf, setTf] = useState<ITransferFunction>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [rootLocus, setRootLocus] = useState<RootLocusOutput>();
   const [step, setStep] = useState<ChartOutput>();
   const [impulse, setImpulse] = useState<ChartOutput>();
+  const [bode, setBode] = useState<BodeChart>();
+  const [nyquist, setNyquist] = useState<NyquistChart>();
 
   // Use useForm to handle the form inputs and validation
   const {
@@ -52,6 +57,7 @@ export const TransferFunctionForm = () => {
 
   // Handle form submission
   const onSubmit = (data: TfFormValues) => {
+    setIsLoading(true);
     const tf = transferFunction(data);
     setTf(tf);
   };
@@ -61,11 +67,18 @@ export const TransferFunctionForm = () => {
     setRootLocus(rlocus);
 
     const step = tf?.step();
-    console.log(step)
     setStep(step);
 
     const impulse = tf?.impulse();
     setImpulse(impulse);
+
+    const bode = tf?.bode();
+    setBode(bode);
+
+    const nyquist = tf?.nyquist();
+    setNyquist(nyquist);
+
+    setIsLoading(false);
   }, [tf]);
 
   return (
@@ -110,7 +123,7 @@ export const TransferFunctionForm = () => {
               <button
                 disabled={isDirty && !isValidating && !isValid}
                 type="submit"
-                className="flex-2 btn btn-primary disabled:opacity-50"
+                className="flex-2 align-middle justify-center btn btn-primary disabled:opacity-50 flex flex-row"
               >
                 Calculate
               </button>
@@ -157,7 +170,7 @@ export const TransferFunctionForm = () => {
         </div>
       </div>
 
-      {tf && (
+      {tf && !isLoading && (
         <>
           <div className="mx-auto max-w-2xl rounded-3xl sm:mt-13 mt-16 lg:mx-0 lg:flex lg:max-w-none">
             <div className="items-center flex w-full pr-5 pl-7 py-3 text-base placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg text-neutral-600 dark:text-white bg-gray-50 dark:bg-slate-900">
@@ -166,13 +179,23 @@ export const TransferFunctionForm = () => {
             {/*           <div className="items-center flex w-full pr-5 pl-7 py-3 text-base placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg text-neutral-600 dark:text-white bg-gray-50 dark:bg-slate-900">
               {rootLocus ? <RlocusChart rlocus={rootLocus} /> : null}
             </div> */}
+          </div>
+          <div className="mx-auto max-w-2xl rounded-3xl sm:mt-13 mt-16 lg:mx-0 lg:flex lg:max-w-none">
             <div className="items-center flex w-full pr-5 pl-7 py-3 text-base placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg text-neutral-600 dark:text-white bg-gray-50 dark:bg-slate-900">
               {step && <StepChart step={step} />}
+            </div>
+            <div className="items-center flex w-full pr-5 pl-7 py-3 text-base placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg text-neutral-600 dark:text-white bg-gray-50 dark:bg-slate-900">
+              {impulse && <ImpulseChart impulse={impulse} />}
             </div>
           </div>
           <div className="mx-auto max-w-2xl rounded-3xl sm:mt-13 mt-16 lg:mx-0 lg:flex lg:max-w-none">
             <div className="items-center flex w-full pr-5 pl-7 py-3 text-base placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg text-neutral-600 dark:text-white bg-gray-50 dark:bg-slate-900">
-              {impulse && <ImpulseChart impulse={impulse} />}
+              {bode && <BodeCharts bode={bode} />}
+            </div>
+          </div>
+          <div className="mx-auto max-w-2xl rounded-3xl sm:mt-13 mt-16 lg:mx-0 lg:flex lg:max-w-none">
+            <div className="items-center flex w-full pr-5 pl-7 py-3 text-base placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg text-neutral-600 dark:text-white bg-gray-50 dark:bg-slate-900">
+              {nyquist && <NyquistPChart nyquist={nyquist} />}
             </div>
           </div>
         </>
