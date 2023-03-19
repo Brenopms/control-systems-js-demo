@@ -30,7 +30,7 @@ const formatData = (data: ChartOutput): ChartData => {
     };
   });
 
-  return chartData;
+  return chartData.slice(1);
 };
 
 export const ImpulseChart = ({ impulse }: ImpulseChartProps) => {
