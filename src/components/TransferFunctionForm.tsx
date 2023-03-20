@@ -6,39 +6,27 @@ import { TextField } from "./TextField";
 import {
   transferFunction,
   ITransferFunction,
-  RootLocusOutput,
-  ChartOutput,
-  BodeChart,
-  NyquistChart,
+  RootLocusData,
+  Point,
+  BodeData,
+  NyquistData,
 } from "systems-control-js";
 import { Outcome } from "./Outcome";
 import { toSuperscriptExpression } from "../utils/supescript";
 import { tfFormInputSchema } from "../validations/tfInput";
-import { PolesAndZerosChart } from "./charts/PolesAndZerosChart";
-import { StepChart } from "./charts/StepChart";
-import { ImpulseChart } from "./charts/ImpulseChart";
-import { BodeCharts } from "./charts/BodeCharts";
-import { NyquistPChart } from "./charts/NyquistChart";
+import { TransferFunctionCharts } from "./charts/TransferFunctionCharts";
 
 // Define the form inputs as a TypeScript interface
 type TfFormValues = z.infer<typeof tfFormInputSchema>;
 
-const boundaryRange = (start: number, end: number, step = 1): number[] => {
-  const rangeValues = [];
-  for (let i = start; i < end; i += step) {
-    rangeValues.push(i);
-  }
-  return rangeValues;
-};
-
 export const TransferFunctionForm = () => {
   const [tf, setTf] = useState<ITransferFunction>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [rootLocus, setRootLocus] = useState<RootLocusOutput>();
-  const [step, setStep] = useState<ChartOutput>();
-  const [impulse, setImpulse] = useState<ChartOutput>();
-  const [bode, setBode] = useState<BodeChart>();
-  const [nyquist, setNyquist] = useState<NyquistChart>();
+  const [_, setRootLocus] = useState<RootLocusData>();
+  const [step, setStep] = useState<Point<number>[]>();
+  const [impulse, setImpulse] = useState<Point<number>[]>();
+  const [bode, setBode] = useState<BodeData>();
+  const [nyquist, setNyquist] = useState<NyquistData>();
 
   // Use useForm to handle the form inputs and validation
   const {
@@ -63,7 +51,7 @@ export const TransferFunctionForm = () => {
   };
 
   useMemo(() => {
-    const rlocus = tf?.rlocus(boundaryRange(0, 600, 1));
+    const rlocus = tf?.rlocus();
     setRootLocus(rlocus);
 
     const step = tf?.step();
@@ -171,34 +159,14 @@ export const TransferFunctionForm = () => {
       </div>
 
       {tf && !isLoading && (
-        <>
-          <div className="mx-auto max-w-2xl rounded-3xl sm:mt-13 mt-16 lg:mx-0 lg:flex lg:max-w-none">
-            <div className="items-center flex w-full pr-5 pl-7 py-3 text-base placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg text-neutral-600 dark:text-white bg-gray-50 dark:bg-slate-900">
-              <PolesAndZerosChart poles={tf.pole()} zeros={tf.zero()} />
-            </div>
-            {/*           <div className="items-center flex w-full pr-5 pl-7 py-3 text-base placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg text-neutral-600 dark:text-white bg-gray-50 dark:bg-slate-900">
-              {rootLocus ? <RlocusChart rlocus={rootLocus} /> : null}
-            </div> */}
-          </div>
-          <div className="mx-auto max-w-2xl rounded-3xl sm:mt-13 mt-16 lg:mx-0 lg:flex lg:max-w-none">
-            <div className="items-center flex w-full pr-5 pl-7 py-3 text-base placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg text-neutral-600 dark:text-white bg-gray-50 dark:bg-slate-900">
-              {step && <StepChart step={step} />}
-            </div>
-            <div className="items-center flex w-full pr-5 pl-7 py-3 text-base placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg text-neutral-600 dark:text-white bg-gray-50 dark:bg-slate-900">
-              {impulse && <ImpulseChart impulse={impulse} />}
-            </div>
-          </div>
-          <div className="mx-auto max-w-2xl rounded-3xl sm:mt-13 mt-16 lg:mx-0 lg:flex lg:max-w-none">
-            <div className="items-center flex w-full pr-5 pl-7 py-3 text-base placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg text-neutral-600 dark:text-white bg-gray-50 dark:bg-slate-900">
-              {bode && <BodeCharts bode={bode} />}
-            </div>
-          </div>
-          <div className="mx-auto max-w-2xl rounded-3xl sm:mt-13 mt-16 lg:mx-0 lg:flex lg:max-w-none">
-            <div className="items-center flex w-full pr-5 pl-7 py-3 text-base placeholder-gray-300 transition duration-500 ease-in-out transform border border-transparent rounded-lg text-neutral-600 dark:text-white bg-gray-50 dark:bg-slate-900">
-              {nyquist && <NyquistPChart nyquist={nyquist} />}
-            </div>
-          </div>
-        </>
+        <TransferFunctionCharts
+          bode={bode}
+          nyquist={nyquist}
+          impulse={impulse}
+          step={step}
+          zeros={tf.zero()}
+          poles={tf.pole()}
+        />
       )}
     </>
   );

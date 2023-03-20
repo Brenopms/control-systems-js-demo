@@ -21,7 +21,7 @@ type ChartData = {
   correspondingPoints: Point<number>[];
 };
 
-export const NyquistPChart = ({ nyquist }: NyquistChartProps) => {
+export const NyquistChart = ({ nyquist }: NyquistChartProps) => {
   const [chartData, setChartData] = useState<ChartData>();
 
   useMemo(() => {
