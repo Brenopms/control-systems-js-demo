@@ -8,13 +8,12 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { ChartOutput } from "systems-control-js";
-import { useState } from "react";
-import { useMemo } from "react";
+import { Point } from "systems-control-js";
+import { useMemo, useState } from "react";
 import { COLORS } from "../../constants/colors";
 
 export interface StepChartProps {
-  step: ChartOutput;
+  step: Point<number>[];
 }
 
 type ChartData = {
@@ -22,14 +21,11 @@ type ChartData = {
   y: string;
 }[];
 
-const formatData = (data: ChartOutput): ChartData => {
-  const chartData: ChartData = data.x.values.map((xValue, index) => {
-    return {
-      x: xValue,
-      y: data.y.values[index].toPrecision(4),
-    };
-  });
-
+const formatData = (data: Point<number>[]): ChartData => {
+  const chartData = data.map((point) => ({
+    x: point.x,
+    y: point.y.toPrecision(4),
+  }));
   return chartData;
 };
 

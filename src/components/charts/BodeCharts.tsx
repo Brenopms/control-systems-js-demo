@@ -1,4 +1,4 @@
-import { bode, BodeChart, Point } from "systems-control-js";
+import { bode, BodeData, Point } from "systems-control-js";
 import { useMemo, useState } from "react";
 import {
   CartesianGrid,
@@ -13,7 +13,7 @@ import {
 import { COLORS } from "../../constants/colors";
 
 export type BodeChartProps = {
-  bode: BodeChart;
+  bode: BodeData;
 };
 
 type ChartData = {
@@ -21,27 +21,25 @@ type ChartData = {
   phase: Point<number>[];
 };
 
-const formatData = (bodeData: BodeChart): ChartData => {
-  const data: ChartData = {
-    magnitude: bodeData.magnitude.x.values.map((xValue, index) => ({
-      x: Math.log(xValue),
-      y: bodeData.magnitude.y.values[index],
+const formatData = (data: BodeData): ChartData => {
+  return {
+    magnitude: data.magnitude.map((point) => ({
+      ...point,
+      x: Math.log10(point.x),
     })),
-    phase: bodeData.phase.x.values.map((xValue, index) => ({
-      x: Math.log(xValue),
-      y: bodeData.phase.y.values[index],
+    phase: data.phase.map((point) => ({
+      ...point,
+      x: Math.log10(point.x),
     })),
   };
-
-  return data;
 };
 
 export const BodeCharts = ({ bode }: BodeChartProps) => {
   const [chartData, setChartData] = useState<ChartData>();
 
   useMemo(() => {
-    const data = formatData(bode);
-    setChartData(data);
+    const formattedData = formatData(bode);
+    setChartData(formattedData);
   }, [bode]);
 
   return (
@@ -58,7 +56,12 @@ export const BodeCharts = ({ bode }: BodeChartProps) => {
         >
           <CartesianGrid />
 
-          <XAxis type="number" dataKey="x" name="Frequency (log)" unit="log10" />
+          <XAxis
+            type="number"
+            dataKey="x"
+            name="Frequency (log)"
+            unit="log10"
+          />
           <YAxis type="number" name="Magnitude" unit="db" />
 
           <Tooltip cursor={{ strokeDasharray: "3" }} />
@@ -86,8 +89,13 @@ export const BodeCharts = ({ bode }: BodeChartProps) => {
         >
           <CartesianGrid />
 
-          <XAxis type="number" dataKey="x" name="Frequency (log)" unit="log10"/>
-          <YAxis type="number" name="Phase" unit="°"  />
+          <XAxis
+            type="number"
+            dataKey="x"
+            name="Frequency (log)"
+            unit="log10"
+          />
+          <YAxis type="number" name="Phase" unit="°" />
 
           <Tooltip cursor={{ strokeDasharray: "3" }} />
 

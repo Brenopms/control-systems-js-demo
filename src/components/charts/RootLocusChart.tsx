@@ -8,32 +8,20 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { ChartData, Point, RootLocusOutput, Trace } from "systems-control-js";
+import { RootLocusData } from "systems-control-js";
 import { COLORS } from "../../constants/colors";
-import { useMemo } from "react";
-import { useState } from "react";
-import { traceToPoints } from "../../utils/traceToPoint";
+import { useMemo, useState } from "react";
 
 interface RlocusChartProps {
-  rlocus: RootLocusOutput;
+  rlocus: RootLocusData;
 }
 
-type ChartLine = (Point<number> & { k: number })[];
+type ChartLine = { x: number; y: number; k: number }[];
 
-const formatData = (rlocus: RootLocusOutput): ChartLine[] => {
-  let traces: Trace<number>[] = Array.isArray(rlocus.chartOutput.data)
-    ? rlocus.chartOutput.data
-    : [rlocus.chartOutput.data];
-
-  const lines = traces.map((trace) => {
-    const points = traceToPoints(trace);
-    const lines = points.map((point, index) => ({
-      ...point,
-      k: rlocus.gains[index],
-    }));
-    return lines;
+const formatData = (rlocus: RootLocusData) => {
+  const lines: ChartLine[] = rlocus.roots.map((roots2) => {
+    return roots2.map((root, index) => ({ ...root, k: rlocus.gains[index] }));
   });
-
   return lines;
 };
 

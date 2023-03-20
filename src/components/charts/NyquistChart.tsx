@@ -1,4 +1,4 @@
-import { NyquistChart, Point } from "systems-control-js";
+import { NyquistData, Point } from "systems-control-js";
 import { useMemo, useState } from "react";
 import {
   CartesianGrid,
@@ -13,7 +13,7 @@ import {
 import { COLORS } from "../../constants/colors";
 
 export type NyquistChartProps = {
-  nyquist: NyquistChart;
+  nyquist: NyquistData;
 };
 
 type ChartData = {
@@ -21,28 +21,11 @@ type ChartData = {
   correspondingPoints: Point<number>[];
 };
 
-const formatData = (nyquistData: NyquistChart): ChartData => {
-  const data: ChartData = {
-    points: nyquistData.points.x.values.map((xValues, index) => ({
-      x: xValues,
-      y: nyquistData.points.y.values[index],
-    })),
-    correspondingPoints: nyquistData.correspondingPoints.x.values.map(
-      (xValues, index) => ({
-        x: xValues,
-        y: nyquistData.correspondingPoints.y.values[index],
-      })
-    ),
-  };
-  return data;
-};
-
 export const NyquistPChart = ({ nyquist }: NyquistChartProps) => {
   const [chartData, setChartData] = useState<ChartData>();
 
   useMemo(() => {
-    const data = formatData(nyquist);
-    setChartData(data);
+    setChartData(nyquist);
   }, [nyquist]);
 
   return (
@@ -57,12 +40,7 @@ export const NyquistPChart = ({ nyquist }: NyquistChartProps) => {
       >
         <CartesianGrid />
 
-        <XAxis
-          type="number"
-          dataKey="x"
-          name="Imaginary Axis"
-          unit="i"
-        />
+        <XAxis type="number" dataKey="x" name="Imaginary Axis" unit="i" />
         <YAxis type="number" name="Real Axis" />
 
         <Tooltip cursor={{ strokeDasharray: "3" }} />
