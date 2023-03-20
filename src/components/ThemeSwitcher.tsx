@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function ThemeSwitcher() {
+export const ThemeSwitcher = () => {
   const [mounted, setMounted] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState<boolean | undefined>(undefined);
 
@@ -61,5 +61,3 @@ function ThemeSwitcher() {
     </div>
   );
 }
-
-export default ThemeSwitcher;

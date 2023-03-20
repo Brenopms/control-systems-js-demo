@@ -1,7 +1,7 @@
-import ThemeSwitcher from "./components/ThemeSwitcher";
-import FAQ from "./components/FAQ";
-import ThemeColorSwitcher from "./components/ThemeColorSwitcher";
+import { FAQ } from "./components/FAQ";
+import { ThemeColorSwitcher } from "./components/ThemeColorSwitcher";
 import { TransferFunctionForm } from "./components/TransferFunctionForm";
+import { ThemeSwitcher } from "./components/ThemeSwitcher";
 
 function App() {
   return (
@@ -13,11 +13,19 @@ function App() {
           <div className="mx-auto max-w-2xl sm:text-center">
             <ThemeColorSwitcher />
             <h2 className="text-3xl font-bold tracking-tight text-brand sm:text-4xl text-center">
-              Profit Margin Calculator
+              Control Systems Calculator
             </h2>
             <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-white text-center">
-              Optimize your menu item prices to maximize profits by identifying
-              the most effective selling prices.
+              Visualize and Design Control Systems with the aid of the{" "}
+              <i>
+                <a
+                  className="text-brand hover:underline"
+                  href="https://github.com/Brenopms/systems-controls-js"
+                >
+                  systems-control-js
+                </a>
+              </i>
+              {" "}package
             </p>
           </div>
 

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { COLORS } from "../constants/colors";
 
-function ThemeColorSwitcher() {
+export const ThemeColorSwitcher = () => {
   const [mounted, setMounted] = useState(false);
   const [color, setColor] = useState<string | undefined>(undefined);
 
@@ -35,5 +35,3 @@ function ThemeColorSwitcher() {
     </div>
   );
 }
-
-export default ThemeColorSwitcher;
