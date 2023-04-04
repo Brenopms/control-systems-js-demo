@@ -15,6 +15,7 @@ import { Outcome } from "./Outcome";
 import { toSuperscriptExpression } from "../utils/supescript";
 import { tfFormInputSchema } from "../validations/tfInput";
 import { TransferFunctionCharts } from "./charts/TransferFunctionCharts";
+import { complexToString } from '../utils/complexToString';
 
 // Define the form inputs as a TypeScript interface
 type TfFormValues = z.infer<typeof tfFormInputSchema>;
@@ -140,7 +141,7 @@ export const TransferFunctionForm = () => {
                 value={
                   tf
                     ?.zero()
-                    .map((i) => i.format(2))
+                    .map((i) => complexToString(i, 2))
                     .join(", ") || ""
                 }
               />
@@ -149,7 +150,7 @@ export const TransferFunctionForm = () => {
                 value={
                   tf
                     ?.pole()
-                    .map((i) => i.format(2))
+                    .map((i) => complexToString(i, 2))
                     .join(", ") || ""
                 }
               />
