@@ -8,7 +8,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { Complex } from "systems-control-js";
+import { Complex } from "control-systems-js";
 import { COLORS } from '../../constants/colors';
 
 interface PolesAndZerosChartProps {

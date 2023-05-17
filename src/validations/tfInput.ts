@@ -1,4 +1,4 @@
-import { isStable } from "systems-control-js";
+import { isStable } from "control-systems-js";
 import * as z from "zod";
 
 const semicolonSeparatedNumbersRegex = /^-?[0-9]+(;-?[0-9]+)*$/;

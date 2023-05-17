@@ -3,7 +3,7 @@ import {
   Complex,
   NyquistData,
   Point,
-} from "systems-control-js";
+} from "control-systems-js";
 import { BodeCharts } from './BodeCharts';
 import { ImpulseChart } from './ImpulseChart';
 import { NyquistChart } from './NyquistChart';

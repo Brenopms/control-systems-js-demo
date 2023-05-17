@@ -1,4 +1,4 @@
-import { Complex } from "systems-control-js";
+import { Complex } from "control-systems-js";
 
 export const complexToString = (value: Complex, precision = 3) => {
   const sign = value?.im < 0 ? "-" : "+";

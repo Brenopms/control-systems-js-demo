@@ -1,4 +1,4 @@
-import { bode, BodeData, Point } from "systems-control-js";
+import { BodeData, Point } from "control-systems-js";
 import { useMemo, useState } from "react";
 import {
   CartesianGrid,
@@ -39,6 +39,7 @@ export const BodeCharts = ({ bode }: BodeChartProps) => {
 
   useMemo(() => {
     const formattedData = formatData(bode);
+    console.log('formattedData', formattedData)
     setChartData(formattedData);
   }, [bode]);
 
@@ -61,6 +62,7 @@ export const BodeCharts = ({ bode }: BodeChartProps) => {
             dataKey="x"
             name="Frequency (log)"
             unit="log10"
+            domain={['dataMin', 'dataMax']}
           />
           <YAxis type="number" name="Magnitude" unit="db" />
 
@@ -94,6 +96,7 @@ export const BodeCharts = ({ bode }: BodeChartProps) => {
             dataKey="x"
             name="Frequency (log)"
             unit="log10"
+            domain={['dataMin', 'dataMax']}
           />
           <YAxis type="number" name="Phase" unit="°" />
 

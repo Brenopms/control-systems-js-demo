@@ -10,7 +10,7 @@ import {
   Point,
   BodeData,
   NyquistData,
-} from "systems-control-js";
+} from "control-systems-js";
 import { Outcome } from "./Outcome";
 import { toSuperscriptExpression } from "../utils/supescript";
 import { tfFormInputSchema } from "../validations/tfInput";

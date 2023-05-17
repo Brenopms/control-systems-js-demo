@@ -1,4 +1,4 @@
-import { NyquistData, Point } from "systems-control-js";
+import { NyquistData, Point } from "control-systems-js";
 import { useMemo, useState } from "react";
 import {
   CartesianGrid,

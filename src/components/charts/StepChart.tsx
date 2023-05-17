@@ -8,7 +8,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { Point } from "systems-control-js";
+import { Point } from "control-systems-js";
 import { useMemo, useState } from "react";
 import { COLORS } from "../../constants/colors";
 

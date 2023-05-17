@@ -8,7 +8,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { RootLocusData } from "systems-control-js";
+import { RootLocusData } from "control-systems-js";
 import { COLORS } from "../../constants/colors";
 import { useMemo, useState } from "react";
 
